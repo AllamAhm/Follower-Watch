@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦖 Das Monster kommt! - LinkedIn Follower Watch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --oliver-color: #e74c3c;
+            --serdar-color: #3498db;
+            --gold: #ffd700;
+            --dark: #1a1a2e;
+            --darker: #0f0f1a;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--darker);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(231, 76, 60, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .main-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            background: linear-gradient(135deg, var(--oliver-color) 0%, #ff6b6b 50%, var(--oliver-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .main-title.victory {
+            background: linear-gradient(135deg, var(--gold) 0%, #ffed4a 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-top: 15px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .tagline .highlight { color: var(--oliver-color); font-weight: 700; }
+        .tagline .serdar { color: var(--serdar-color); font-weight: 700; }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3)); }
+            to { filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6)); }
+        }
+
+        .story-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px auto;
+            max-width: 700px;
+            text-align: center;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .story-box p { color: #999; font-size: 1rem; line-height: 1.8; }
+
+        .story-box .years {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .story-box .year-item { text-align: center; }
+        .story-box .year-number { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; }
+        .story-box .year-label { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 2px; }
+        .serdar-years { color: var(--serdar-color); }
+        .oliver-years { color: var(--oliver-color); }
+
+        .status-badge {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-top: 25px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-badge.hunting {
+            background: linear-gradient(135deg, var(--oliver-color), #ff6b6b);
+            color: white;
+            box-shadow: 0 10px 40px rgba(231, 76, 60, 0.4);
+        }
+
+        .status-badge.victory {
+            background: linear-gradient(135deg, var(--gold), #ffed4a);
+            color: var(--darker);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .battle-arena {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 50px 0;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .fighter {
+            text-align: center;
+            padding: 30px;
+            border-radius: 24px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .fighter:hover { transform: translateY(-10px); }
+
+        .fighter.serdar {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.15) 0%, rgba(52, 152, 219, 0.05) 100%);
+            border: 2px solid rgba(52, 152, 219, 0.5);
+        }
+
+        .fighter.serdar.leader {
+            border-color: var(--serdar-color);
+            box-shadow: 0 20px 60px rgba(52, 152, 219, 0.3);
+        }
+
+        .fighter.oliver {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2) 0%, rgba(231, 76, 60, 0.05) 100%);
+            border: 2px solid var(--oliver-color);
+        }
+
+        .fighter.oliver.leader { box-shadow: 0 20px 60px rgba(231, 76, 60, 0.4); }
+
+        .crown {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            animation: bounce 1s ease-in-out infinite;
+            display: none;
+        }
+
+        .leader .crown { display: block; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .monster-badge {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: var(--oliver-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: shake 0.5s ease-in-out infinite;
+            box-shadow: 0 5px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            object-fit: cover;
+            border: 4px solid currentColor;
+        }
+
+        .fighter.serdar .avatar { border-color: var(--serdar-color); }
+        .fighter.oliver .avatar { border-color: var(--oliver-color); }
+        .leader .avatar { box-shadow: 0 0 30px currentColor; }
+
+        .fighter-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .fighter-title { font-size: 0.85rem; color: #888; margin-bottom: 5px; }
+        .fighter-subtitle { font-size: 0.75rem; color: #666; margin-bottom: 20px; }
+
+        .follower-count {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            line-height: 1;
+        }
+
+        .fighter.serdar .follower-count { color: var(--serdar-color); }
+        .fighter.oliver .follower-count { color: var(--oliver-color); }
+        .leader .follower-count { text-shadow: 0 0 30px currentColor; }
+
+        .follower-label {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .vs-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vs {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: #333;
+        }
+
+        .countdown-section {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(231, 76, 60, 0.05));
+            border: 2px solid var(--oliver-color);
+            border-radius: 24px;
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 500px;
+            text-align: center;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            box-shadow: 0 20px 60px rgba(231, 76, 60, 0.2);
+        }
+
+        .countdown-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            color: var(--oliver-color);
+        }
+
+        .countdown-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 6rem;
+            color: var(--gold);
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 1rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 10px;
+        }
+
+        .race-track {
+            background: var(--dark);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+
+        .track-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            color: #888;
+            text-align: center;
+        }
+
+        .track-container { position: relative; margin-bottom: 20px; }
+
+        .track {
+            height: 50px;
+            background: #0a0a15;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .track-bar {
+            height: 100%;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: width 1.5s ease-out;
+        }
+
+        .track-bar.serdar { background: linear-gradient(90deg, var(--serdar-color), #5dade2); }
+        .track-bar.oliver {
+            background: linear-gradient(90deg, var(--oliver-color), #ff6b6b);
+            box-shadow: 0 0 30px rgba(231, 76, 60, 0.5);
+        }
+
+        .track-bar .runner { font-size: 1.3rem; margin-left: 10px; }
+
+        .track-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .track-name { display: flex; align-items: center; gap: 8px; color: #aaa; }
+        .track-name .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .track-name .dot.serdar { background: var(--serdar-color); }
+        .track-name .dot.oliver { background: var(--oliver-color); }
+        .track-years { color: #666; font-size: 0.75rem; }
+
+        .fun-message {
+            background: var(--dark);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+
+        .fun-message .emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: wiggle 1s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .fun-message .message {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .fun-message .submessage {
+            font-size: 1rem;
+            color: #888;
+            margin-top: 10px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .history-section {
+            background: var(--dark);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            animation: fadeInUp 1s ease-out 1.2s both;
+        }
+
+        .history-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: #888;
+            text-align: center;
+        }
+
+        .history-list { max-height: 250px; overflow-y: auto; }
+
+        .history-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .history-date { color: #666; }
+        .history-serdar { color: var(--serdar-color); font-weight: 600; }
+        .history-oliver { color: var(--oliver-color); font-weight: 600; }
+        .history-diff { color: var(--gold); font-weight: 600; text-align: right; }
+
+        .admin-section {
+            background: var(--dark);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            display: none;
+            border: 2px dashed #333;
+        }
+
+        .admin-section.visible { display: block; animation: fadeIn 0.3s ease-out; }
+
+        .admin-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: #e74c3c;
+            text-align: center;
+        }
+
+        .admin-hint {
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+        }
+
+        .image-upload-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #333;
+        }
+
+        .upload-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: #888;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .upload-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .upload-group label {
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .upload-group input[type="file"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-group input[type="file"]:hover {
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .upload-group input[type="file"]::file-selector-button {
+            background: var(--gold);
+            color: var(--darker);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: 1px solid #444;
+            color: #888;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+
+        .input-group label {
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .input-group input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .update-btn {
+            background: linear-gradient(135deg, var(--gold) 0%, #ffed4a 100%);
+            color: var(--darker);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .update-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: #444;
+            font-size: 0.85rem;
+        }
+
+        .footer a { color: var(--serdar-color); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        .secret-trigger {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: default;
+            z-index: 100;
+            opacity: 0;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 900px) {
+            .battle-arena { grid-template-columns: 1fr; gap: 30px; }
+            .vs-section { order: -1; }
+            .vs { font-size: 2rem; }
+            .input-grid { grid-template-columns: 1fr; }
+            .avatar { width: 120px; height: 120px; }
+            .follower-count { font-size: 3rem; }
+            .countdown-number { font-size: 4rem; }
+            .story-box .years { gap: 20px; }
+            .history-item { grid-template-columns: 1fr 1fr; gap: 10px; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--darker); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+        .victory-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+        }
+
+        .victory-overlay.show { display: flex; animation: fadeIn 0.5s ease-out; }
+
+        .victory-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 8vw, 5rem);
+            color: var(--gold);
+            text-align: center;
+            animation: victoryPop 0.5s ease-out;
+            padding: 0 20px;
+        }
+
+        .victory-subtext { font-size: 1.5rem; color: white; margin-top: 20px; text-align: center; }
+
+        .victory-close {
+            margin-top: 40px;
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .victory-close:hover { background: var(--gold); color: var(--darker); }
+
+        @keyframes victoryPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="confetti-canvas"></canvas>
+    <div class="bg-animation"></div>
+    <div class="secret-trigger" id="secret-trigger"></div>
+
+    <div class="victory-overlay" id="victory-overlay">
+        <div class="victory-text">🦖 DAS MONSTER HAT GEWONNEN! 🦖</div>
+        <div class="victory-subtext">Oliver hat Serdar überholt!</div>
+        <button class="victory-close" onclick="closeVictory()">Weiter zur Feier!</button>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <p class="subtitle">LinkedIn Follower Watch</p>
+            <h1 class="main-title" id="main-title">DAS MONSTER KOMMT! 🦖</h1>
+            <p class="tagline">
+                <span class="serdar">Serdar</span> hat <span class="highlight">Oliver</span> LinkedIn gezeigt...<br>
+                <em>"Er hat ein Monster erschaffen!"</em>
+            </p>
+            <div class="status-badge hunting" id="status-badge">🦖 Das Monster jagt!</div>
+        </header>
+
+        <div class="story-box">
+            <p>
+                <strong style="color: var(--serdar-color);">Serdar</strong> ist seit <strong>7 Jahren</strong> auf LinkedIn.<br>
+                <strong style="color: var(--oliver-color);">Oliver</strong> ist erst seit <strong>1 Jahr</strong> dabei – und holt rasant auf!
+            </p>
+            <div class="years">
+                <div class="year-item">
+                    <div class="year-number serdar-years">7</div>
+                    <div class="year-label">Jahre Serdar</div>
+                </div>
+                <div class="year-item">
+                    <div class="year-number oliver-years">1</div>
+                    <div class="year-label">Jahr Oliver</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="battle-arena">
+            <div class="fighter serdar leader" id="serdar-card">
+                <div class="crown">👑</div>
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%233498db' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3ESE%3C/text%3E%3C/svg%3E" alt="Serdar Ergün" class="avatar">
+                <h2 class="fighter-name">Serdar Ergün</h2>
+                <p class="fighter-title">Head of Development</p>
+                <p class="fighter-subtitle">7 Jahre LinkedIn-Veteran 👴</p>
+                <div class="follower-count" id="serdar-count">9.926</div>
+                <p class="follower-label">Follower</p>
+            </div>
+
+            <div class="vs-section">
+                <div class="vs">VS</div>
+            </div>
+
+            <div class="fighter oliver" id="oliver-card">
+                <div class="crown">👑</div>
+                <div class="monster-badge" id="monster-badge">Das Monster! 🦖</div>
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%23e74c3c' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3EOR%3C/text%3E%3C/svg%3E" alt="Oliver Reuter" class="avatar">
+                <h2 class="fighter-name">Oliver Reuter</h2>
+                <p class="fighter-title">Technischer Direktionsleiter</p>
+                <p class="fighter-subtitle">Erst 1 Jahr auf LinkedIn! 🚀</p>
+                <div class="follower-count" id="oliver-count">8.496</div>
+                <p class="follower-label">Follower</p>
+            </div>
+        </div>
+
+        <div class="countdown-section" id="countdown-section">
+            <h3 class="countdown-title" id="countdown-title">🎯 Das Monster braucht noch</h3>
+            <div class="countdown-number" id="countdown-number">1.431</div>
+            <p class="countdown-label" id="countdown-label">Follower zum Überholen</p>
+        </div>
+
+        <div class="race-track">
+            <h3 class="track-title">🏁 Das Rennen</h3>
+            <div class="track-container">
+                <div class="track-info">
+                    <div class="track-name"><span class="dot serdar"></span> Serdar</div>
+                    <div class="track-years">7 Jahre auf LinkedIn</div>
+                </div>
+                <div class="track">
+                    <div class="track-bar serdar" id="serdar-bar" style="width: 100%;">
+                        <span class="runner">😰</span>
+                    </div>
+                </div>
+            </div>
+            <div class="track-container">
+                <div class="track-info">
+                    <div class="track-name"><span class="dot oliver"></span> Oliver (Das Monster)</div>
+                    <div class="track-years">1 Jahr auf LinkedIn</div>
+                </div>
+                <div class="track">
+                    <div class="track-bar oliver" id="oliver-bar" style="width: 85%;">
+                        <span class="runner">🦖</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fun-message">
+            <div class="emoji" id="fun-emoji">🦖</div>
+            <div class="message" id="fun-text">DAS MONSTER KOMMT NÄHER!</div>
+            <div class="submessage" id="fun-subtext">Oliver braucht nur 1 Jahr um 7 Jahre aufzuholen!</div>
+        </div>
+
+        <div class="history-section">
+            <h3 class="history-title">📜 Jagd-Historie</h3>
+            <div class="history-list" id="history-list"></div>
+        </div>
+
+        <div class="admin-section" id="admin-section">
+            <h3 class="admin-title">🔐 Geheimer Admin-Bereich</h3>
+            <p class="admin-hint">Zum Ausblenden: Nochmal 3x auf die untere rechte Ecke klicken oder Strg+Shift+A</p>
+            
+            <!-- Follower Update -->
+            <div class="input-grid">
+                <div class="input-group">
+                    <label>Serdar's Follower</label>
+                    <input type="number" id="input-serdar" value="9926">
+                </div>
+                <div class="input-group">
+                    <label>Oliver's Follower</label>
+                    <input type="number" id="input-oliver" value="8496">
+                </div>
+                <button class="update-btn" onclick="updateCounts()">Update!</button>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="image-upload-section">
+                <h4 class="upload-title">📷 Profilbilder hochladen</h4>
+                <div class="upload-grid">
+                    <div class="upload-group">
+                        <label>Serdar's Bild</label>
+                        <input type="file" id="serdar-image-input" accept="image/*" onchange="uploadImage('serdar', this)">
+                        <button class="reset-btn" onclick="resetImage('serdar')">Zurücksetzen</button>
+                    </div>
+                    <div class="upload-group">
+                        <label>Oliver's Bild</label>
+                        <input type="file" id="oliver-image-input" accept="image/*" onchange="uploadImage('oliver', this)">
+                        <button class="reset-btn" onclick="resetImage('oliver')">Zurücksetzen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Made with ❤️ für das ZÜBLIN Team</p>
+            <p style="margin-top: 10px;">
+                <a href="https://www.linkedin.com/in/serdar-erg%C3%BCn/" target="_blank">Serdar's LinkedIn</a> | 
+                <a href="https://www.linkedin.com/in/oliver-reuter-b78bbb339/" target="_blank">Oliver's LinkedIn</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const confetti = [];
+        const colors = ['#e74c3c', '#ffd700', '#ffed4a', '#ff6b6b', '#3498db', '#00cec9'];
+
+        class ConfettiPiece {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.size = Math.random() * 10 + 5;
+                this.speedY = Math.random() * 3 + 2;
+                this.speedX = Math.random() * 4 - 2;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 10 - 5;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+                if (this.y > canvas.height) {
+                    this.y = -this.size;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.6);
+                ctx.restore();
+            }
+        }
+
+        let animationRunning = false;
+
+        function startConfetti() {
+            canvas.style.display = 'block';
+            confetti.length = 0;
+            for (let i = 0; i < 200; i++) confetti.push(new ConfettiPiece());
+            if (!animationRunning) { animationRunning = true; animateConfetti(); }
+        }
+
+        function animateConfetti() {
+            if (!animationRunning) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confetti.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateConfetti);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        let clickCount = 0, clickTimer = null;
+
+        document.getElementById('secret-trigger').addEventListener('click', () => {
+            clickCount++;
+            if (clickTimer) clearTimeout(clickTimer);
+            clickTimer = setTimeout(() => {
+                if (clickCount >= 3) {
+                    const admin = document.getElementById('admin-section');
+                    admin.classList.toggle('visible');
+                    if (admin.classList.contains('visible')) admin.scrollIntoView({ behavior: 'smooth' });
+                }
+                clickCount = 0;
+            }, 500);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                e.preventDefault();
+                document.getElementById('admin-section').classList.toggle('visible');
+            }
+        });
+
+        let serdarFollowers = 9926, oliverFollowers = 8496;
+
+        const saved = localStorage.getItem('followerData');
+        if (saved) {
+            const d = JSON.parse(saved);
+            serdarFollowers = d.serdar || 9926;
+            oliverFollowers = d.oliver || 8496;
+            document.getElementById('input-serdar').value = serdarFollowers;
+            document.getElementById('input-oliver').value = oliverFollowers;
+        }
+
+        function formatNumber(n) { return n.toLocaleString('de-DE'); }
+
+        function getFunMessage(diff, oliverWins) {
+            if (oliverWins) return { emoji: '🦖👑', text: 'DAS MONSTER HAT GEWONNEN!', subtext: 'Oliver hat in nur 1 Jahr den 7-Jahre-Veteranen überholt!' };
+            if (diff <= 0) return { emoji: '⚡', text: 'GLEICHSTAND!', subtext: 'Unglaublich! 7 Jahre vs 1 Jahr - und jetzt Gleichstand!' };
+            if (diff <= 100) return { emoji: '😱', text: 'DAS MONSTER IST DA!', subtext: 'Nur noch ' + formatNumber(diff) + ' Follower! Serdar sollte sich Sorgen machen!' };
+            if (diff <= 500) return { emoji: '🔥', text: 'DAS MONSTER ATMET SERDAR IM NACKEN!', subtext: 'Der Abstand schmilzt! 7 Jahre Vorsprung fast aufgeholt!' };
+            if (diff <= 1000) return { emoji: '💨', text: 'DAS MONSTER SPRINTET!', subtext: 'Oliver holt mit irrer Geschwindigkeit auf!' };
+            if (diff <= 1500) return { emoji: '🦖', text: 'DAS MONSTER KOMMT NÄHER!', subtext: 'In nur 1 Jahr fast 7 Jahre aufgeholt - wahnsinn!' };
+            return { emoji: '🎯', text: 'DAS MONSTER HAT DAS ZIEL IM BLICK', subtext: 'Serdar hat noch Vorsprung... aber für wie lange?' };
+        }
+
+        function updateDisplay() {
+            const diff = serdarFollowers - oliverFollowers;
+            const oliverWins = oliverFollowers > serdarFollowers;
+            const tie = oliverFollowers === serdarFollowers;
+
+            document.getElementById('serdar-count').textContent = formatNumber(serdarFollowers);
+            document.getElementById('oliver-count').textContent = formatNumber(oliverFollowers);
+
+            const cs = document.getElementById('countdown-section');
+            if (oliverWins) {
+                document.getElementById('countdown-title').textContent = '🏆 Oliver führt mit';
+                document.getElementById('countdown-number').textContent = formatNumber(Math.abs(diff));
+                document.getElementById('countdown-label').textContent = 'Followern Vorsprung!';
+            } else if (tie) {
+                document.getElementById('countdown-title').textContent = '⚡ GLEICHSTAND!';
+                document.getElementById('countdown-number').textContent = '0';
+                document.getElementById('countdown-label').textContent = 'Wer zieht zuerst davon?';
+            } else {
+                document.getElementById('countdown-title').textContent = '🎯 Das Monster braucht noch';
+                document.getElementById('countdown-number').textContent = formatNumber(diff + 1);
+                document.getElementById('countdown-label').textContent = 'Follower zum Überholen';
+            }
+
+            const max = Math.max(serdarFollowers, oliverFollowers);
+            document.getElementById('serdar-bar').style.width = (serdarFollowers / max * 100) + '%';
+            document.getElementById('oliver-bar').style.width = (oliverFollowers / max * 100) + '%';
+
+            const serdarRunner = document.querySelector('#serdar-bar .runner');
+            const oliverRunner = document.querySelector('#oliver-bar .runner');
+            if (oliverWins) { serdarRunner.textContent = '😱'; oliverRunner.textContent = '🦖👑'; }
+            else if (diff <= 500) { serdarRunner.textContent = '😰'; oliverRunner.textContent = '🦖🔥'; }
+            else { serdarRunner.textContent = '😅'; oliverRunner.textContent = '🦖'; }
+
+            const sc = document.getElementById('serdar-card');
+            const oc = document.getElementById('oliver-card');
+            const sb = document.getElementById('status-badge');
+            const mt = document.getElementById('main-title');
+            const mb = document.getElementById('monster-badge');
+
+            if (oliverWins) {
+                sc.classList.remove('leader'); oc.classList.add('leader');
+                sb.textContent = '🦖👑 Das Monster hat gewonnen!';
+                sb.classList.remove('hunting'); sb.classList.add('victory');
+                mt.textContent = '🦖 DAS MONSTER HAT GESIEGT! 🦖';
+                mt.classList.add('victory');
+                mb.textContent = 'SIEGER! 👑';
+            } else if (tie) {
+                sc.classList.remove('leader'); oc.classList.remove('leader');
+                sb.textContent = '⚡ Gleichstand!';
+                mt.textContent = 'UNENTSCHIEDEN!';
+                mb.textContent = 'Gleich auf! ⚡';
+            } else {
+                sc.classList.add('leader'); oc.classList.remove('leader');
+                sb.textContent = '🦖 Das Monster jagt!';
+                sb.classList.add('hunting'); sb.classList.remove('victory');
+                mt.textContent = 'DAS MONSTER KOMMT! 🦖';
+                mt.classList.remove('victory');
+                mb.textContent = 'Das Monster! 🦖';
+            }
+
+            const fun = getFunMessage(diff, oliverWins);
+            document.getElementById('fun-emoji').textContent = fun.emoji;
+            document.getElementById('fun-text').textContent = fun.text;
+            document.getElementById('fun-subtext').textContent = fun.subtext;
+        }
+
+        function updateCounts() {
+            const ns = parseInt(document.getElementById('input-serdar').value) || 0;
+            const no = parseInt(document.getElementById('input-oliver').value) || 0;
+            const wasBehind = oliverFollowers <= serdarFollowers;
+
+            serdarFollowers = ns; oliverFollowers = no;
+            localStorage.setItem('followerData', JSON.stringify({ serdar: serdarFollowers, oliver: oliverFollowers }));
+
+            updateDisplay(); saveToHistory(); loadHistory();
+
+            if (wasBehind && oliverFollowers > serdarFollowers) showVictory();
+        }
+
+        function showVictory() {
+            document.getElementById('victory-overlay').classList.add('show');
+            startConfetti();
+        }
+
+        function closeVictory() {
+            document.getElementById('victory-overlay').classList.remove('show');
+        }
+
+        function saveToHistory() {
+            const h = JSON.parse(localStorage.getItem('followerHistory') || '[]');
+            h.unshift({ date: new Date().toLocaleString('de-DE'), serdar: serdarFollowers, oliver: oliverFollowers, diff: serdarFollowers - oliverFollowers });
+            localStorage.setItem('followerHistory', JSON.stringify(h.slice(0, 100)));
+        }
+
+        function loadHistory() {
+            const h = JSON.parse(localStorage.getItem('followerHistory') || '[]');
+            const c = document.getElementById('history-list');
+            if (!h.length) { c.innerHTML = '<p style="color:#666;text-align:center;padding:20px;">Noch keine Historie.</p>'; return; }
+            c.innerHTML = h.map(i => `<div class="history-item"><span class="history-date">${i.date}</span><span class="history-serdar">Serdar: ${formatNumber(i.serdar)}</span><span class="history-oliver">Oliver: ${formatNumber(i.oliver)}</span><span class="history-diff">${i.diff > 0 ? '+' : ''}${formatNumber(i.diff)}</span></div>`).join('');
+        }
+
+        updateDisplay(); loadHistory();
+
+        // Image upload functions
+        function uploadImage(person, input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                
+                // Update avatar
+                if (person === 'serdar') {
+                    document.querySelector('#serdar-card .avatar').src = base64;
+                    localStorage.setItem('serdarImage', base64);
+                } else {
+                    document.querySelector('#oliver-card .avatar').src = base64;
+                    localStorage.setItem('oliverImage', base64);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetImage(person) {
+            if (person === 'serdar') {
+                const defaultImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%233498db' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3ESE%3C/text%3E%3C/svg%3E";
+                document.querySelector('#serdar-card .avatar').src = defaultImg;
+                localStorage.removeItem('serdarImage');
+                document.getElementById('serdar-image-input').value = '';
+            } else {
+                const defaultImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%23e74c3c' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3EOR%3C/text%3E%3C/svg%3E";
+                document.querySelector('#oliver-card .avatar').src = defaultImg;
+                localStorage.removeItem('oliverImage');
+                document.getElementById('oliver-image-input').value = '';
+            }
+        }
+
+        // Load saved images on page load
+        function loadSavedImages() {
+            const serdarImg = localStorage.getItem('serdarImage');
+            const oliverImg = localStorage.getItem('oliverImage');
+            
+            if (serdarImg) {
+                document.querySelector('#serdar-card .avatar').src = serdarImg;
+            }
+            if (oliverImg) {
+                document.querySelector('#oliver-card .avatar').src = oliverImg;
+            }
+        }
+
+        loadSavedImages();
+    </script>
+</body>
+</html>
