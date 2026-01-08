@@ -6,11 +6,7 @@
     <title>🦖 Das Monster kommt! - LinkedIn Follower Watch</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --oliver-color: #e74c3c;
@@ -30,10 +26,8 @@
 
         #confetti-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 1000;
             display: none;
@@ -41,10 +35,8 @@
 
         .bg-animation {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: 
                 radial-gradient(ellipse at 20% 80%, rgba(231, 76, 60, 0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 20%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
@@ -107,6 +99,12 @@
         @keyframes glow {
             from { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3)); }
             to { filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6)); }
+        }
+
+        .last-updated {
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 15px;
         }
 
         .story-box {
@@ -423,196 +421,6 @@
             margin-right: auto;
         }
 
-        .history-section {
-            background: var(--dark);
-            border-radius: 20px;
-            padding: 30px;
-            margin: 40px 0;
-            animation: fadeInUp 1s ease-out 1.2s both;
-        }
-
-        .history-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            color: #888;
-            text-align: center;
-        }
-
-        .history-list { max-height: 250px; overflow-y: auto; }
-
-        .history-item {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 15px;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-        }
-
-        .history-date { color: #666; }
-        .history-serdar { color: var(--serdar-color); font-weight: 600; }
-        .history-oliver { color: var(--oliver-color); font-weight: 600; }
-        .history-diff { color: var(--gold); font-weight: 600; text-align: right; }
-
-        .admin-section {
-            background: var(--dark);
-            border-radius: 20px;
-            padding: 30px;
-            margin: 40px 0;
-            display: none;
-            border: 2px dashed #333;
-        }
-
-        .admin-section.visible { display: block; animation: fadeIn 0.3s ease-out; }
-
-        .admin-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            color: #e74c3c;
-            text-align: center;
-        }
-
-        .admin-hint {
-            text-align: center;
-            color: #666;
-            font-size: 0.8rem;
-            margin-bottom: 20px;
-        }
-
-        .image-upload-section {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid #333;
-        }
-
-        .upload-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: #888;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .upload-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .upload-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .upload-group label {
-            font-size: 0.85rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .upload-group input[type="file"] {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 12px;
-            color: white;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .upload-group input[type="file"]:hover {
-            border-color: var(--gold);
-            background: rgba(255, 215, 0, 0.05);
-        }
-
-        .upload-group input[type="file"]::file-selector-button {
-            background: var(--gold);
-            color: var(--darker);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .reset-btn {
-            background: transparent;
-            border: 1px solid #444;
-            color: #888;
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .reset-btn:hover {
-            border-color: #e74c3c;
-            color: #e74c3c;
-        }
-
-        .input-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
-            gap: 15px;
-            align-items: end;
-        }
-
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
-
-        .input-group label {
-            font-size: 0.85rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .input-group input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 20px;
-            border-radius: 12px;
-            color: white;
-            font-size: 1.2rem;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-        }
-
-        .update-btn {
-            background: linear-gradient(135deg, var(--gold) 0%, #ffed4a 100%);
-            color: var(--darker);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .update-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
-        }
-
         .footer {
             text-align: center;
             padding: 40px;
@@ -623,15 +431,25 @@
         .footer a { color: var(--serdar-color); text-decoration: none; }
         .footer a:hover { text-decoration: underline; }
 
-        .secret-trigger {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-            cursor: default;
-            z-index: 100;
-            opacity: 0;
+        .loading {
+            text-align: center;
+            padding: 100px;
+            font-size: 1.5rem;
+            color: #888;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #333;
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         @keyframes fadeInDown {
@@ -653,12 +471,10 @@
             .battle-arena { grid-template-columns: 1fr; gap: 30px; }
             .vs-section { order: -1; }
             .vs { font-size: 2rem; }
-            .input-grid { grid-template-columns: 1fr; }
             .avatar { width: 120px; height: 120px; }
             .follower-count { font-size: 3rem; }
             .countdown-number { font-size: 4rem; }
             .story-box .years { gap: 20px; }
-            .history-item { grid-template-columns: 1fr 1fr; gap: 10px; }
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -667,10 +483,8 @@
 
         .victory-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9);
             display: none;
             justify-content: center;
@@ -716,7 +530,6 @@
 <body>
     <canvas id="confetti-canvas"></canvas>
     <div class="bg-animation"></div>
-    <div class="secret-trigger" id="secret-trigger"></div>
 
     <div class="victory-overlay" id="victory-overlay">
         <div class="victory-text">🦖 DAS MONSTER HAT GEWONNEN! 🦖</div>
@@ -724,149 +537,124 @@
         <button class="victory-close" onclick="closeVictory()">Weiter zur Feier!</button>
     </div>
 
-    <div class="container">
-        <header class="header">
-            <p class="subtitle">LinkedIn Follower Watch</p>
-            <h1 class="main-title" id="main-title">DAS MONSTER KOMMT! 🦖</h1>
-            <p class="tagline">
-                <span class="serdar">Serdar</span> hat <span class="highlight">Oliver</span> LinkedIn gezeigt...<br>
-                <em>"Er hat ein Monster erschaffen!"</em>
-            </p>
-            <div class="status-badge hunting" id="status-badge">🦖 Das Monster jagt!</div>
-        </header>
-
-        <div class="story-box">
-            <p>
-                <strong style="color: var(--serdar-color);">Serdar</strong> ist seit <strong>7 Jahren</strong> auf LinkedIn.<br>
-                <strong style="color: var(--oliver-color);">Oliver</strong> ist erst seit <strong>1 Jahr</strong> dabei – und holt rasant auf!
-            </p>
-            <div class="years">
-                <div class="year-item">
-                    <div class="year-number serdar-years">7</div>
-                    <div class="year-label">Jahre Serdar</div>
-                </div>
-                <div class="year-item">
-                    <div class="year-number oliver-years">1</div>
-                    <div class="year-label">Jahr Oliver</div>
-                </div>
-            </div>
+    <div class="container" id="main-container">
+        <!-- Loading State -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Lade Daten...</p>
         </div>
 
-        <div class="battle-arena">
-            <div class="fighter serdar leader" id="serdar-card">
-                <div class="crown">👑</div>
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%233498db' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3ESE%3C/text%3E%3C/svg%3E" alt="Serdar Ergün" class="avatar">
-                <h2 class="fighter-name">Serdar Ergün</h2>
-                <p class="fighter-title">Head of Development</p>
-                <p class="fighter-subtitle">7 Jahre LinkedIn-Veteran 👴</p>
-                <div class="follower-count" id="serdar-count">9.926</div>
-                <p class="follower-label">Follower</p>
-            </div>
+        <!-- Main Content (hidden until data loads) -->
+        <div id="content" style="display: none;">
+            <header class="header">
+                <p class="subtitle">LinkedIn Follower Watch</p>
+                <h1 class="main-title" id="main-title">DAS MONSTER KOMMT! 🦖</h1>
+                <p class="tagline">
+                    <span class="serdar">Serdar</span> hat <span class="highlight">Oliver</span> LinkedIn gezeigt...<br>
+                    <em>"Er hat ein Monster erschaffen!"</em>
+                </p>
+                <div class="status-badge hunting" id="status-badge">🦖 Das Monster jagt!</div>
+                <p class="last-updated">Zuletzt aktualisiert: <span id="last-updated">-</span></p>
+            </header>
 
-            <div class="vs-section">
-                <div class="vs">VS</div>
-            </div>
-
-            <div class="fighter oliver" id="oliver-card">
-                <div class="crown">👑</div>
-                <div class="monster-badge" id="monster-badge">Das Monster! 🦖</div>
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%23e74c3c' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3EOR%3C/text%3E%3C/svg%3E" alt="Oliver Reuter" class="avatar">
-                <h2 class="fighter-name">Oliver Reuter</h2>
-                <p class="fighter-title">Technischer Direktionsleiter</p>
-                <p class="fighter-subtitle">Erst 1 Jahr auf LinkedIn! 🚀</p>
-                <div class="follower-count" id="oliver-count">8.496</div>
-                <p class="follower-label">Follower</p>
-            </div>
-        </div>
-
-        <div class="countdown-section" id="countdown-section">
-            <h3 class="countdown-title" id="countdown-title">🎯 Das Monster braucht noch</h3>
-            <div class="countdown-number" id="countdown-number">1.431</div>
-            <p class="countdown-label" id="countdown-label">Follower zum Überholen</p>
-        </div>
-
-        <div class="race-track">
-            <h3 class="track-title">🏁 Das Rennen</h3>
-            <div class="track-container">
-                <div class="track-info">
-                    <div class="track-name"><span class="dot serdar"></span> Serdar</div>
-                    <div class="track-years">7 Jahre auf LinkedIn</div>
-                </div>
-                <div class="track">
-                    <div class="track-bar serdar" id="serdar-bar" style="width: 100%;">
-                        <span class="runner">😰</span>
+            <div class="story-box">
+                <p>
+                    <strong style="color: var(--serdar-color);">Serdar</strong> ist seit <strong><span id="serdar-years">7</span> Jahren</strong> auf LinkedIn.<br>
+                    <strong style="color: var(--oliver-color);">Oliver</strong> ist erst seit <strong><span id="oliver-years">1</span> Jahr</strong> dabei – und holt rasant auf!
+                </p>
+                <div class="years">
+                    <div class="year-item">
+                        <div class="year-number serdar-years" id="serdar-years-big">7</div>
+                        <div class="year-label">Jahre Serdar</div>
+                    </div>
+                    <div class="year-item">
+                        <div class="year-number oliver-years" id="oliver-years-big">1</div>
+                        <div class="year-label">Jahr Oliver</div>
                     </div>
                 </div>
             </div>
-            <div class="track-container">
-                <div class="track-info">
-                    <div class="track-name"><span class="dot oliver"></span> Oliver (Das Monster)</div>
-                    <div class="track-years">1 Jahr auf LinkedIn</div>
+
+            <div class="battle-arena">
+                <div class="fighter serdar leader" id="serdar-card">
+                    <div class="crown">👑</div>
+                    <img src="" alt="Serdar Ergün" class="avatar" id="serdar-avatar">
+                    <h2 class="fighter-name" id="serdar-name">Serdar Ergün</h2>
+                    <p class="fighter-title" id="serdar-title">Head of Development</p>
+                    <p class="fighter-subtitle" id="serdar-subtitle">7 Jahre LinkedIn-Veteran 👴</p>
+                    <div class="follower-count" id="serdar-count">-</div>
+                    <p class="follower-label">Follower</p>
                 </div>
-                <div class="track">
-                    <div class="track-bar oliver" id="oliver-bar" style="width: 85%;">
-                        <span class="runner">🦖</span>
+
+                <div class="vs-section">
+                    <div class="vs">VS</div>
+                </div>
+
+                <div class="fighter oliver" id="oliver-card">
+                    <div class="crown">👑</div>
+                    <div class="monster-badge" id="monster-badge">Das Monster! 🦖</div>
+                    <img src="" alt="Oliver Reuter" class="avatar" id="oliver-avatar">
+                    <h2 class="fighter-name" id="oliver-name">Oliver Reuter</h2>
+                    <p class="fighter-title" id="oliver-title">Technischer Direktionsleiter</p>
+                    <p class="fighter-subtitle" id="oliver-subtitle">Erst 1 Jahr auf LinkedIn! 🚀</p>
+                    <div class="follower-count" id="oliver-count">-</div>
+                    <p class="follower-label">Follower</p>
+                </div>
+            </div>
+
+            <div class="countdown-section" id="countdown-section">
+                <h3 class="countdown-title" id="countdown-title">🎯 Das Monster braucht noch</h3>
+                <div class="countdown-number" id="countdown-number">-</div>
+                <p class="countdown-label" id="countdown-label">Follower zum Überholen</p>
+            </div>
+
+            <div class="race-track">
+                <h3 class="track-title">🏁 Das Rennen</h3>
+                <div class="track-container">
+                    <div class="track-info">
+                        <div class="track-name"><span class="dot serdar"></span> Serdar</div>
+                        <div class="track-years" id="track-serdar-years">7 Jahre auf LinkedIn</div>
+                    </div>
+                    <div class="track">
+                        <div class="track-bar serdar" id="serdar-bar" style="width: 100%;">
+                            <span class="runner">😰</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="track-container">
+                    <div class="track-info">
+                        <div class="track-name"><span class="dot oliver"></span> Oliver (Das Monster)</div>
+                        <div class="track-years" id="track-oliver-years">1 Jahr auf LinkedIn</div>
+                    </div>
+                    <div class="track">
+                        <div class="track-bar oliver" id="oliver-bar" style="width: 85%;">
+                            <span class="runner">🦖</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="fun-message">
-            <div class="emoji" id="fun-emoji">🦖</div>
-            <div class="message" id="fun-text">DAS MONSTER KOMMT NÄHER!</div>
-            <div class="submessage" id="fun-subtext">Oliver braucht nur 1 Jahr um 7 Jahre aufzuholen!</div>
-        </div>
-
-        <div class="history-section">
-            <h3 class="history-title">📜 Jagd-Historie</h3>
-            <div class="history-list" id="history-list"></div>
-        </div>
-
-        <div class="admin-section" id="admin-section">
-            <h3 class="admin-title">🔐 Geheimer Admin-Bereich</h3>
-            <p class="admin-hint">Zum Ausblenden: Nochmal 3x auf die untere rechte Ecke klicken oder Strg+Shift+A</p>
-            
-            <!-- Follower Update -->
-            <div class="input-grid">
-                <div class="input-group">
-                    <label>Serdar's Follower</label>
-                    <input type="number" id="input-serdar" value="9926">
-                </div>
-                <div class="input-group">
-                    <label>Oliver's Follower</label>
-                    <input type="number" id="input-oliver" value="8496">
-                </div>
-                <button class="update-btn" onclick="updateCounts()">Update!</button>
+            <div class="fun-message">
+                <div class="emoji" id="fun-emoji">🦖</div>
+                <div class="message" id="fun-text">DAS MONSTER KOMMT NÄHER!</div>
+                <div class="submessage" id="fun-subtext">Oliver braucht nur 1 Jahr um 7 Jahre aufzuholen!</div>
             </div>
 
-            <!-- Image Upload -->
-            <div class="image-upload-section">
-                <h4 class="upload-title">📷 Profilbilder hochladen</h4>
-                <div class="upload-grid">
-                    <div class="upload-group">
-                        <label>Serdar's Bild</label>
-                        <input type="file" id="serdar-image-input" accept="image/*" onchange="uploadImage('serdar', this)">
-                        <button class="reset-btn" onclick="resetImage('serdar')">Zurücksetzen</button>
-                    </div>
-                    <div class="upload-group">
-                        <label>Oliver's Bild</label>
-                        <input type="file" id="oliver-image-input" accept="image/*" onchange="uploadImage('oliver', this)">
-                        <button class="reset-btn" onclick="resetImage('oliver')">Zurücksetzen</button>
-                    </div>
-                </div>
-            </div>
+            <footer class="footer">
+                <p>Made with ❤️ für das ZÜBLIN Team</p>
+                <p style="margin-top: 10px;">
+                    <a href="" id="serdar-linkedin" target="_blank">Serdar's LinkedIn</a> | 
+                    <a href="" id="oliver-linkedin" target="_blank">Oliver's LinkedIn</a>
+                </p>
+            </footer>
         </div>
-
-        <footer class="footer">
-            <p>Made with ❤️ für das ZÜBLIN Team</p>
-            <p style="margin-top: 10px;">
-                <a href="https://www.linkedin.com/in/serdar-erg%C3%BCn/" target="_blank">Serdar's LinkedIn</a> | 
-                <a href="https://www.linkedin.com/in/oliver-reuter-b78bbb339/" target="_blank">Oliver's LinkedIn</a>
-            </p>
-        </footer>
     </div>
 
     <script>
+        // Default images (fallback)
+        const DEFAULT_SERDAR_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%233498db' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3ESE%3C/text%3E%3C/svg%3E";
+        const DEFAULT_OLIVER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%23e74c3c' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3EOR%3C/text%3E%3C/svg%3E";
+
+        // Confetti
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -926,37 +714,8 @@
             canvas.height = window.innerHeight;
         });
 
-        let clickCount = 0, clickTimer = null;
-
-        document.getElementById('secret-trigger').addEventListener('click', () => {
-            clickCount++;
-            if (clickTimer) clearTimeout(clickTimer);
-            clickTimer = setTimeout(() => {
-                if (clickCount >= 3) {
-                    const admin = document.getElementById('admin-section');
-                    admin.classList.toggle('visible');
-                    if (admin.classList.contains('visible')) admin.scrollIntoView({ behavior: 'smooth' });
-                }
-                clickCount = 0;
-            }, 500);
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-                e.preventDefault();
-                document.getElementById('admin-section').classList.toggle('visible');
-            }
-        });
-
-        let serdarFollowers = 9926, oliverFollowers = 8496;
-
-        const saved = localStorage.getItem('followerData');
-        if (saved) {
-            const d = JSON.parse(saved);
-            serdarFollowers = d.serdar || 9926;
-            oliverFollowers = d.oliver || 8496;
-            document.getElementById('input-serdar').value = serdarFollowers;
-            document.getElementById('input-oliver').value = oliverFollowers;
+        function closeVictory() {
+            document.getElementById('victory-overlay').classList.remove('show');
         }
 
         function formatNumber(n) { return n.toLocaleString('de-DE'); }
@@ -971,15 +730,51 @@
             return { emoji: '🎯', text: 'DAS MONSTER HAT DAS ZIEL IM BLICK', subtext: 'Serdar hat noch Vorsprung... aber für wie lange?' };
         }
 
-        function updateDisplay() {
-            const diff = serdarFollowers - oliverFollowers;
-            const oliverWins = oliverFollowers > serdarFollowers;
-            const tie = oliverFollowers === serdarFollowers;
+        function updateDisplay(data) {
+            const serdar = data.serdar;
+            const oliver = data.oliver;
+            const diff = serdar.followers - oliver.followers;
+            const oliverWins = oliver.followers > serdar.followers;
+            const tie = oliver.followers === serdar.followers;
 
-            document.getElementById('serdar-count').textContent = formatNumber(serdarFollowers);
-            document.getElementById('oliver-count').textContent = formatNumber(oliverFollowers);
+            // Update names and titles
+            document.getElementById('serdar-name').textContent = serdar.name;
+            document.getElementById('serdar-title').textContent = serdar.title;
+            document.getElementById('serdar-subtitle').textContent = serdar.subtitle;
+            document.getElementById('oliver-name').textContent = oliver.name;
+            document.getElementById('oliver-title').textContent = oliver.title;
+            document.getElementById('oliver-subtitle').textContent = oliver.subtitle;
 
-            const cs = document.getElementById('countdown-section');
+            // Update years
+            document.getElementById('serdar-years').textContent = serdar.yearsOnLinkedIn;
+            document.getElementById('serdar-years-big').textContent = serdar.yearsOnLinkedIn;
+            document.getElementById('oliver-years').textContent = oliver.yearsOnLinkedIn;
+            document.getElementById('oliver-years-big').textContent = oliver.yearsOnLinkedIn;
+            document.getElementById('track-serdar-years').textContent = serdar.yearsOnLinkedIn + ' Jahre auf LinkedIn';
+            document.getElementById('track-oliver-years').textContent = oliver.yearsOnLinkedIn + ' Jahr auf LinkedIn';
+
+            // Update LinkedIn links
+            document.getElementById('serdar-linkedin').href = serdar.linkedinUrl;
+            document.getElementById('oliver-linkedin').href = oliver.linkedinUrl;
+
+            // Update images
+            const serdarImg = document.getElementById('serdar-avatar');
+            const oliverImg = document.getElementById('oliver-avatar');
+            
+            serdarImg.src = serdar.image || DEFAULT_SERDAR_IMG;
+            serdarImg.onerror = () => { serdarImg.src = DEFAULT_SERDAR_IMG; };
+            
+            oliverImg.src = oliver.image || DEFAULT_OLIVER_IMG;
+            oliverImg.onerror = () => { oliverImg.src = DEFAULT_OLIVER_IMG; };
+
+            // Update follower counts
+            document.getElementById('serdar-count').textContent = formatNumber(serdar.followers);
+            document.getElementById('oliver-count').textContent = formatNumber(oliver.followers);
+
+            // Update last updated
+            document.getElementById('last-updated').textContent = data.lastUpdated || '-';
+
+            // Update countdown
             if (oliverWins) {
                 document.getElementById('countdown-title').textContent = '🏆 Oliver führt mit';
                 document.getElementById('countdown-number').textContent = formatNumber(Math.abs(diff));
@@ -994,16 +789,19 @@
                 document.getElementById('countdown-label').textContent = 'Follower zum Überholen';
             }
 
-            const max = Math.max(serdarFollowers, oliverFollowers);
-            document.getElementById('serdar-bar').style.width = (serdarFollowers / max * 100) + '%';
-            document.getElementById('oliver-bar').style.width = (oliverFollowers / max * 100) + '%';
+            // Update progress bars
+            const max = Math.max(serdar.followers, oliver.followers);
+            document.getElementById('serdar-bar').style.width = (serdar.followers / max * 100) + '%';
+            document.getElementById('oliver-bar').style.width = (oliver.followers / max * 100) + '%';
 
+            // Update emojis
             const serdarRunner = document.querySelector('#serdar-bar .runner');
             const oliverRunner = document.querySelector('#oliver-bar .runner');
             if (oliverWins) { serdarRunner.textContent = '😱'; oliverRunner.textContent = '🦖👑'; }
             else if (diff <= 500) { serdarRunner.textContent = '😰'; oliverRunner.textContent = '🦖🔥'; }
             else { serdarRunner.textContent = '😅'; oliverRunner.textContent = '🦖'; }
 
+            // Update cards
             const sc = document.getElementById('serdar-card');
             const oc = document.getElementById('oliver-card');
             const sb = document.getElementById('status-badge');
@@ -1017,6 +815,12 @@
                 mt.textContent = '🦖 DAS MONSTER HAT GESIEGT! 🦖';
                 mt.classList.add('victory');
                 mb.textContent = 'SIEGER! 👑';
+                // Show victory screen on first load if Oliver wins
+                if (!sessionStorage.getItem('victoryShown')) {
+                    document.getElementById('victory-overlay').classList.add('show');
+                    startConfetti();
+                    sessionStorage.setItem('victoryShown', 'true');
+                }
             } else if (tie) {
                 sc.classList.remove('leader'); oc.classList.remove('leader');
                 sb.textContent = '⚡ Gleichstand!';
@@ -1031,98 +835,37 @@
                 mb.textContent = 'Das Monster! 🦖';
             }
 
+            // Update fun message
             const fun = getFunMessage(diff, oliverWins);
             document.getElementById('fun-emoji').textContent = fun.emoji;
             document.getElementById('fun-text').textContent = fun.text;
             document.getElementById('fun-subtext').textContent = fun.subtext;
         }
 
-        function updateCounts() {
-            const ns = parseInt(document.getElementById('input-serdar').value) || 0;
-            const no = parseInt(document.getElementById('input-oliver').value) || 0;
-            const wasBehind = oliverFollowers <= serdarFollowers;
-
-            serdarFollowers = ns; oliverFollowers = no;
-            localStorage.setItem('followerData', JSON.stringify({ serdar: serdarFollowers, oliver: oliverFollowers }));
-
-            updateDisplay(); saveToHistory(); loadHistory();
-
-            if (wasBehind && oliverFollowers > serdarFollowers) showVictory();
-        }
-
-        function showVictory() {
-            document.getElementById('victory-overlay').classList.add('show');
-            startConfetti();
-        }
-
-        function closeVictory() {
-            document.getElementById('victory-overlay').classList.remove('show');
-        }
-
-        function saveToHistory() {
-            const h = JSON.parse(localStorage.getItem('followerHistory') || '[]');
-            h.unshift({ date: new Date().toLocaleString('de-DE'), serdar: serdarFollowers, oliver: oliverFollowers, diff: serdarFollowers - oliverFollowers });
-            localStorage.setItem('followerHistory', JSON.stringify(h.slice(0, 100)));
-        }
-
-        function loadHistory() {
-            const h = JSON.parse(localStorage.getItem('followerHistory') || '[]');
-            const c = document.getElementById('history-list');
-            if (!h.length) { c.innerHTML = '<p style="color:#666;text-align:center;padding:20px;">Noch keine Historie.</p>'; return; }
-            c.innerHTML = h.map(i => `<div class="history-item"><span class="history-date">${i.date}</span><span class="history-serdar">Serdar: ${formatNumber(i.serdar)}</span><span class="history-oliver">Oliver: ${formatNumber(i.oliver)}</span><span class="history-diff">${i.diff > 0 ? '+' : ''}${formatNumber(i.diff)}</span></div>`).join('');
-        }
-
-        updateDisplay(); loadHistory();
-
-        // Image upload functions
-        function uploadImage(person, input) {
-            const file = input.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64 = e.target.result;
+        // Load data from JSON file
+        async function loadData() {
+            try {
+                // Add cache-busting parameter to always get fresh data
+                const response = await fetch('data.json?t=' + Date.now());
+                if (!response.ok) throw new Error('Failed to load data');
+                const data = await response.json();
                 
-                // Update avatar
-                if (person === 'serdar') {
-                    document.querySelector('#serdar-card .avatar').src = base64;
-                    localStorage.setItem('serdarImage', base64);
-                } else {
-                    document.querySelector('#oliver-card .avatar').src = base64;
-                    localStorage.setItem('oliverImage', base64);
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function resetImage(person) {
-            if (person === 'serdar') {
-                const defaultImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%233498db' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3ESE%3C/text%3E%3C/svg%3E";
-                document.querySelector('#serdar-card .avatar').src = defaultImg;
-                localStorage.removeItem('serdarImage');
-                document.getElementById('serdar-image-input').value = '';
-            } else {
-                const defaultImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%23e74c3c' width='150' height='150' rx='75'/%3E%3Ctext x='75' y='85' font-family='Arial' font-size='50' fill='white' text-anchor='middle'%3EOR%3C/text%3E%3C/svg%3E";
-                document.querySelector('#oliver-card .avatar').src = defaultImg;
-                localStorage.removeItem('oliverImage');
-                document.getElementById('oliver-image-input').value = '';
+                // Hide loading, show content
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                
+                updateDisplay(data);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('loading').innerHTML = `
+                    <p style="color: #e74c3c;">❌ Fehler beim Laden der Daten</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">Stelle sicher, dass data.json existiert.</p>
+                `;
             }
         }
 
-        // Load saved images on page load
-        function loadSavedImages() {
-            const serdarImg = localStorage.getItem('serdarImage');
-            const oliverImg = localStorage.getItem('oliverImage');
-            
-            if (serdarImg) {
-                document.querySelector('#serdar-card .avatar').src = serdarImg;
-            }
-            if (oliverImg) {
-                document.querySelector('#oliver-card .avatar').src = oliverImg;
-            }
-        }
-
-        loadSavedImages();
+        // Initialize
+        loadData();
     </script>
 </body>
 </html>
