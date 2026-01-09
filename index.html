@@ -421,6 +421,49 @@
             margin-right: auto;
         }
 
+        .history-section {
+            background: var(--dark);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            animation: fadeInUp 1s ease-out 1.2s both;
+        }
+
+        .history-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: #888;
+            text-align: center;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .history-item:first-child {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .history-date { color: #888; }
+        .history-serdar { color: var(--serdar-color); font-weight: 600; }
+        .history-oliver { color: var(--oliver-color); font-weight: 600; }
+        .history-diff { color: var(--gold); font-weight: 600; text-align: right; }
+
         .footer {
             text-align: center;
             padding: 40px;
@@ -475,6 +518,7 @@
             .follower-count { font-size: 3rem; }
             .countdown-number { font-size: 4rem; }
             .story-box .years { gap: 20px; }
+            .history-item { grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem; }
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -639,6 +683,11 @@
                 <div class="submessage" id="fun-subtext">Oliver braucht nur 1 Jahr um 7 Jahre aufzuholen!</div>
             </div>
 
+            <div class="history-section">
+                <h3 class="history-title">📜 Jagd-Historie</h3>
+                <div class="history-list" id="history-list"></div>
+            </div>
+
             <footer class="footer">
                 <p>Made with ❤️ für das ZÜBLIN Team</p>
                 <p style="margin-top: 10px;">
@@ -719,6 +768,36 @@
         }
 
         function formatNumber(n) { return n.toLocaleString('de-DE'); }
+
+        function displayHistory(history) {
+            const container = document.getElementById('history-list');
+            
+            if (!history || history.length === 0) {
+                container.innerHTML = '<p style="color:#666;text-align:center;padding:20px;">Noch keine Historie.</p>';
+                return;
+            }
+
+            // Sort by date (newest first) - assuming format DD.MM.YYYY
+            const sorted = [...history].sort((a, b) => {
+                const partsA = a.date.split('.');
+                const partsB = b.date.split('.');
+                const dateA = new Date(partsA[2], partsA[1] - 1, partsA[0]);
+                const dateB = new Date(partsB[2], partsB[1] - 1, partsB[0]);
+                return dateB - dateA;
+            });
+
+            container.innerHTML = sorted.map(item => {
+                const diff = item.serdar - item.oliver;
+                return `
+                    <div class="history-item">
+                        <span class="history-date">${item.date}</span>
+                        <span class="history-serdar">Serdar: ${formatNumber(item.serdar)}</span>
+                        <span class="history-oliver">Oliver: ${formatNumber(item.oliver)}</span>
+                        <span class="history-diff">${diff > 0 ? '+' : ''}${formatNumber(diff)}</span>
+                    </div>
+                `;
+            }).join('');
+        }
 
         function getFunMessage(diff, oliverWins) {
             if (oliverWins) return { emoji: '🦖👑', text: 'DAS MONSTER HAT GEWONNEN!', subtext: 'Oliver hat in nur 1 Jahr den 7-Jahre-Veteranen überholt!' };
@@ -855,6 +934,7 @@
                 document.getElementById('content').style.display = 'block';
                 
                 updateDisplay(data);
+                displayHistory(data.history || []);
             } catch (error) {
                 console.error('Error loading data:', error);
                 document.getElementById('loading').innerHTML = `
