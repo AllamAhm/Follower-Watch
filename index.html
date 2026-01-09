@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🦖 Das Monster kommt! - LinkedIn Follower Watch</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -438,8 +439,26 @@
             text-align: center;
         }
 
+        .chart-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            height: 300px;
+            position: relative;
+        }
+
+        .history-subtitle {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: #666;
+            text-align: center;
+        }
+
         .history-list {
-            max-height: 300px;
+            max-height: 250px;
             overflow-y: auto;
         }
 
@@ -519,6 +538,7 @@
             .countdown-number { font-size: 4rem; }
             .story-box .years { gap: 20px; }
             .history-item { grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem; }
+            .chart-container { height: 250px; padding: 15px; }
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -684,7 +704,12 @@
             </div>
 
             <div class="history-section">
-                <h3 class="history-title">📜 Jagd-Historie</h3>
+                <h3 class="history-title">📈 Verlauf</h3>
+                <div class="chart-container">
+                    <canvas id="follower-chart"></canvas>
+                </div>
+                
+                <h4 class="history-subtitle">📜 Letzte Einträge</h4>
                 <div class="history-list" id="history-list"></div>
             </div>
 
@@ -769,6 +794,8 @@
 
         function formatNumber(n) { return n.toLocaleString('de-DE'); }
 
+        let followerChart = null;
+
         function displayHistory(history) {
             const container = document.getElementById('history-list');
             
@@ -777,16 +804,22 @@
                 return;
             }
 
-            // Sort by date (newest first) - assuming format DD.MM.YYYY
+            // Sort by date (oldest first for chart, then reverse for list)
             const sorted = [...history].sort((a, b) => {
                 const partsA = a.date.split('.');
                 const partsB = b.date.split('.');
                 const dateA = new Date(partsA[2], partsA[1] - 1, partsA[0]);
                 const dateB = new Date(partsB[2], partsB[1] - 1, partsB[0]);
-                return dateB - dateA;
+                return dateA - dateB;
             });
 
-            container.innerHTML = sorted.map(item => {
+            // Create Chart
+            createChart(sorted);
+
+            // Show only last 10 entries in list (newest first)
+            const recentEntries = [...sorted].reverse().slice(0, 10);
+            
+            container.innerHTML = recentEntries.map(item => {
                 const diff = item.serdar - item.oliver;
                 return `
                     <div class="history-item">
@@ -797,6 +830,141 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function createChart(sortedHistory) {
+            const ctx = document.getElementById('follower-chart').getContext('2d');
+            
+            // Destroy existing chart if exists
+            if (followerChart) {
+                followerChart.destroy();
+            }
+
+            const labels = sortedHistory.map(item => item.date);
+            const serdarData = sortedHistory.map(item => item.serdar);
+            const oliverData = sortedHistory.map(item => item.oliver);
+
+            followerChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Serdar',
+                            data: serdarData,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: '#3498db',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: 'Oliver (Das Monster)',
+                            data: oliverData,
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: '#e74c3c',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#888',
+                                font: {
+                                    family: 'Outfit',
+                                    size: 12
+                                },
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(26, 26, 46, 0.95)',
+                            titleColor: '#fff',
+                            bodyColor: '#aaa',
+                            borderColor: '#333',
+                            borderWidth: 1,
+                            cornerRadius: 10,
+                            padding: 12,
+                            titleFont: {
+                                family: 'Outfit',
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                family: 'Outfit',
+                                size: 13
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatNumber(context.parsed.y) + ' Follower';
+                                },
+                                afterBody: function(tooltipItems) {
+                                    const serdarVal = tooltipItems[0]?.parsed.y || 0;
+                                    const oliverVal = tooltipItems[1]?.parsed.y || 0;
+                                    const diff = serdarVal - oliverVal;
+                                    return '\nAbstand: ' + (diff > 0 ? '+' : '') + formatNumber(diff);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#666',
+                                font: {
+                                    family: 'Outfit',
+                                    size: 11
+                                },
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#666',
+                                font: {
+                                    family: 'Outfit',
+                                    size: 11
+                                },
+                                callback: function(value) {
+                                    return formatNumber(value);
+                                }
+                            },
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
         }
 
         function getFunMessage(diff, oliverWins) {
