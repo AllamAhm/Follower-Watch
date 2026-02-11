@@ -3,7 +3,7 @@
     "name": "Serdar Ergün",
     "title": "Head of Development",
     "subtitle": "7 Jahre LinkedIn-Veteran 👴",
-    "followers": 10332,
+    "followers": 10551,
     "yearsOnLinkedIn": 7,
     "linkedinUrl": "https://www.linkedin.com/in/serdar-erg%C3%BCn/",
     "image": "images/serdar.jpg"
@@ -12,12 +12,12 @@
     "name": "Oliver Reuter",
     "title": "Technischer Direktionsleiter",
     "subtitle": "Erst 1 Jahr auf LinkedIn! 🚀",
-    "followers": 9171,
+    "followers": 9324,
     "yearsOnLinkedIn": 1,
     "linkedinUrl": "https://www.linkedin.com/in/oliver-reuter-b78bbb339/",
     "image": "images/oliver.jpg"
   },
-  "lastUpdated": "02.02.2026",
+  "lastUpdated": "11.02.2026",
   "history": [
     { "date": "07.01.2025", "serdar": 6600, "oliver": 0 },
     { "date": "07.01.2026", "serdar": 9926, "oliver": 8495 },
@@ -30,6 +30,7 @@
     { "date": "20.01.2026", "serdar": 10120, "oliver": 8734 },
     { "date": "23.01.2026", "serdar": 10175, "oliver": 8839 },
     { "date": "29.01.2026", "serdar": 10277, "oliver": 9117 },
-    { "date": "02.02.2026", "serdar": 10332, "oliver": 9171 }
+    { "date": "02.02.2026", "serdar": 10332, "oliver": 9171 },
+    { "date": "11.02.2026", "serdar": 10551, "oliver": 9324 }
   ]
 }
